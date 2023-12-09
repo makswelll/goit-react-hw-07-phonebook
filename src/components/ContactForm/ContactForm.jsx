@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FormButton, FormStyle } from './ContactFormStyled';
-import { addContact } from 'redux/contactSlice';
+
 import { nanoid } from 'nanoid';
 import { selectContacts } from 'redux/useSelectors';
+import { addContact } from 'redux/operation';
 
 const ContactForm = () => {
   const dispatch = useDispatch();
@@ -16,7 +17,11 @@ const ContactForm = () => {
   };
 
   const isContactExists = () => {
-    return existingContacts.some(
+    if (!existingContacts || !existingContacts.items) {
+      return false;
+    }
+
+    return existingContacts.items.some(
       existingContact =>
         existingContact.name.toLowerCase() === contact.name.toLowerCase()
     );
